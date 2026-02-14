@@ -14,6 +14,10 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { BlogCategories } from './collections/BlogCategory/Categories'
+import { Blogs } from './collections/Blogs'
+import { Comments } from './collections/Comments'
+import { BlogsReactions } from './collections/Blogs/reaction'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,6 +37,12 @@ export default buildConfig({
     },
     user: Users.slug,
     livePreview: {
+      collections: ['pages'],
+      url: ({ data }) => {
+        const slug = data?.slug || ''
+        return `/$  {slug}?preview=true`
+      },
+
       breakpoints: [
         {
           label: 'Mobile',
@@ -62,7 +72,17 @@ export default buildConfig({
       url: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    BlogCategories,
+    Blogs,
+    Comments,
+    BlogsReactions,
+    Posts,
+    Media,
+    Categories,
+    Users,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
