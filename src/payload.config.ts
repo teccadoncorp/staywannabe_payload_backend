@@ -23,6 +23,8 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  cors: ['http://localhost:3001'],
+
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
@@ -83,7 +85,6 @@ export default buildConfig({
     Categories,
     Users,
   ],
-  cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
