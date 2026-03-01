@@ -1,6 +1,18 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { Content } from '@radix-ui/react-select'
+import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { Archive } from 'lucide-react'
+import { FormBlock } from '@/blocks/Form/config'
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
 
@@ -66,9 +78,50 @@ export const Blogs: CollectionConfig = {
       defaultValue: 'text',
     },
     {
-      name: 'content',
-      type: 'richText',
-      required: true,
+      type: 'tabs',
+      tabs: [
+        {
+          fields: [
+            {
+              name: 'layout',
+              type: 'blocks',
+              blocks: [CallToAction, MediaBlock, FormBlock],
+              required: true,
+              admin: {
+                initCollapsed: true,
+              },
+            },
+          ],
+          label: 'Content',
+        },
+        {
+          name: 'meta',
+          label: 'SEO',
+          fields: [
+            OverviewField({
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+              imagePath: 'meta.image',
+            }),
+            MetaTitleField({
+              hasGenerateFn: true,
+            }),
+            MetaImageField({
+              relationTo: 'media',
+            }),
+
+            MetaDescriptionField({}),
+            PreviewField({
+              // if the `generateUrl` function is configured
+              hasGenerateFn: true,
+
+              // field paths to match the target field for data
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+            }),
+          ],
+        },
+      ],
     },
 
     // Tags

@@ -814,20 +814,14 @@ export interface Blog {
   video?: (number | null) | Media;
   audio?: (number | null) | Media;
   blogType?: ('text' | 'image' | 'video' | 'audio') | null;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
+  layout: (CallToActionBlock | MediaBlock | FormBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
   };
   tags?: string[] | null;
   categories: (number | Blogscategory)[];
@@ -1315,7 +1309,20 @@ export interface BlogsSelect<T extends boolean = true> {
   video?: T;
   audio?: T;
   blogType?: T;
-  content?: T;
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   tags?: T;
   categories?: T;
   readTime?: T;
